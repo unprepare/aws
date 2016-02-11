@@ -1,0 +1,7 @@
+Download and install the AWS Command Line Interface. Set it up (http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html and http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/VMImportPrerequisites.html)
+Export your current VM [shut down VM, in vsphere select file -> export OVF template, select single file OVA, ideally uncheck cd/dvd inclusion]
+Upload the exported image into your Amazon S3 bucket (using CLI) [cd to directory then #aws s3 cp amvmx-dc01.ova s3://amvianmexico/ —expected-size 894307685436]
+import image file using ec2 import-image (use ec2 describe-import-image-tasks to monitor progress)[aws ec2 import-image --description "PCG1IT36-CL" --disk-container "{ \"Description\":\"First CLI task\", \"UserBucket\":{ \"S3Bucket\":\"amvianmexico\", \"S3Key\":\"pcg1it36.ova\"}}"] [aws ec2 describe-import-image-tasks]
+Create the instance using the AWS webgui, launch instance, and imported VM will be under ‘my AMIs’ - select appropriate specs for destination
+set up networking:  VPC, subnet, route table, gateway, elastic IPs all need configuration (under VPC service), also make sure to look at security group settings, DNS hostnames if still having issues.
+use remote desktop to connect to the new instance (http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/connecting_to_windows_instance.html) [https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/troubleshooting-windows-instances.html#rdp-issues]
